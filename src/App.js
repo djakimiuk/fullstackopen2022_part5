@@ -69,6 +69,16 @@ const App = () => {
       setTitle("");
       setAuthor("");
       setUrl("");
+      setNotificationMsg({
+        body: `a new blog ${savedBlog.title} added`,
+        error: false,
+      });
+      setTimeout(() => {
+        setNotificationMsg({
+          body: null,
+          error: false,
+        });
+      }, 5000);
     } catch (error) {
       setNotificationMsg({ body: error.message, error: true });
       setTimeout(() => {
@@ -76,6 +86,9 @@ const App = () => {
           body: null,
           error: false,
         });
+        setTitle("");
+        setAuthor("");
+        setUrl("");
       }, 5000);
     }
   };
