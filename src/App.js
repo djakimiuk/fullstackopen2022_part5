@@ -61,7 +61,7 @@ const App = () => {
     try {
       blogFormRef.current.toggleVisibility();
       const savedBlog = await blogService.create(blogObject);
-      setBlogs(blogs.concat(savedBlog));
+      setBlogs(blogs.concat({ ...savedBlog, user }));
       setNotificationMsg({
         body: `a new blog ${savedBlog.title} added`,
         error: false,
