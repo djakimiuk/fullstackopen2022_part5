@@ -1,9 +1,12 @@
 import { useState } from "react";
-const Blog = ({ blog, modifyBlog }) => {
+const Blog = ({ blog, modifyBlog, user, deleteBlog }) => {
   const [visible, setVisible] = useState(false);
   const [likes, setLikes] = useState(blog.likes);
 
   const showWhenVisible = { display: visible ? "" : "none" };
+  const showDeleteBtn = {
+    display: blog.user.username === user.username ? "" : "none",
+  };
 
   const blogStyle = {
     paddingTop: 10,
@@ -17,11 +20,18 @@ const Blog = ({ blog, modifyBlog }) => {
     setVisible(!visible);
   };
 
-  const increaseLikes = (blogId) => {
+  const increaseLikes = () => {
     const updatedLikes = likes + 1;
     setLikes(updatedLikes);
     const modifiedBlog = { ...blog, likes: updatedLikes };
-    modifyBlog(blogId, modifiedBlog);
+    modifyBlog(blog.id, modifiedBlog);
+  };
+
+  const deleteHandler = () => {
+    if (window.confirm(`Remove blog ${blog.title} ${blog.author}`)) {
+      deleteBlog(blog.id);
+    }
+    return;
   };
 
   return (
@@ -30,12 +40,16 @@ const Blog = ({ blog, modifyBlog }) => {
       <button onClick={visibilityHandler}>{visible ? "hide" : "view"}</button>
       <br></br>
       <div style={showWhenVisible}>
-        {blog.url}
+        <a href={blog.url}>{blog.url}</a>
         <br></br>
         {likes}
-        <button onClick={() => increaseLikes(blog.id)}>like</button>
+        <button onClick={increaseLikes}>like</button>
         <br></br>
         {blog.user.name}
+        <br></br>
+        <button style={showDeleteBtn} onClick={deleteHandler}>
+          remove
+        </button>
       </div>
     </div>
   );
