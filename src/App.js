@@ -83,6 +83,20 @@ const App = () => {
     }
   };
 
+  const modifyBlog = async (blogId, modifiedBlogObject) => {
+    try {
+      await blogService.modify(blogId, modifiedBlogObject);
+    } catch (error) {
+      setNotificationMsg({ body: error.message, error: true });
+      setTimeout(() => {
+        setNotificationMsg({
+          body: null,
+          error: false,
+        });
+      }, 5000);
+    }
+  };
+
   const loginForm = () => (
     <form onSubmit={handleLogin}>
       <div>
@@ -117,7 +131,7 @@ const App = () => {
         <BlogForm createBlog={addBlog} />
       </Togglable>
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} modifyBlog={modifyBlog} />
       ))}
     </div>
   );
