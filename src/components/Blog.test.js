@@ -27,7 +27,7 @@ test("renders content", () => {
   expect(likes).not.toBeVisible();
 });
 
-test("clicking the button calls event handler once", async () => {
+test("clicking the button view makes url and likes visible", async () => {
   const blog = {
     title: "Component test with react-testing-library",
     author: "Dawid",
@@ -46,4 +46,30 @@ test("clicking the button calls event handler once", async () => {
   const likes = screen.getByText(120);
   expect(url).toBeVisible();
   expect(likes).toBeVisible();
+});
+
+test("clicking the like button twice calls event handler twice as well", async () => {
+  const blog = {
+    title: "Component test with react-testing-library",
+    author: "Dawid",
+    user: { username: "Dawid" },
+    url: "https://google.com",
+    likes: 120,
+  };
+
+  const mockHandler = jest.fn();
+
+  render(
+    <Blog blog={blog} user={{ username: "Dawid" }} modifyBlog={mockHandler} />
+  );
+
+  const user = userEvent.setup();
+  const viewButton = screen.getByText("view");
+  await user.click(viewButton);
+
+  const likeButton = screen.getByText("like");
+  await user.click(likeButton);
+  await user.click(likeButton);
+
+  expect(mockHandler.mock.calls).toHaveLength(2);
 });
