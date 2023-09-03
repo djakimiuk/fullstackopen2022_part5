@@ -45,7 +45,9 @@ const Blog = ({ blog, modifyBlog, user, deleteBlog }) => {
         <a href={blog.url}>{blog.url}</a>
         <br></br>
         <span className="likes">{likes}</span>
-        <button onClick={increaseLikes}>like</button>
+        <button onClick={increaseLikes} id="like-button">
+          like
+        </button>
         <br></br>
         <span className="blogUser">{blog.user.name}</span>
         <br></br>

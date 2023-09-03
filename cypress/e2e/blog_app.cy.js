@@ -50,7 +50,7 @@ describe("Blog app", () => {
     });
   });
 
-  describe.only("When a blog is created", function () {
+  describe("When a blog is created", function () {
     beforeEach(function () {
       cy.login({ username: "dawid123", password: "dawid123" });
       cy.createBlog({
@@ -82,7 +82,7 @@ describe("Blog app", () => {
       cy.contains("Cypress test title").should("not.exist");
     });
 
-    it.only("Only the creator can see the delete button of a blog", function () {
+    it("Only the creator can see the delete button of a blog", function () {
       cy.contains("Cypress test title")
         .parent()
         .within(() => {
@@ -103,6 +103,44 @@ describe("Blog app", () => {
           cy.contains("view").click();
           cy.get("#remove-button").should("not.be.visible");
         });
+    });
+  });
+
+  describe.only("When there is more than one blog", function () {
+    beforeEach(function () {
+      cy.login({ username: "dawid123", password: "dawid123" });
+      cy.createBlog({
+        title: "The title with the most likes",
+        author: "The author with the most likes",
+        url: "http://cypress.io",
+      });
+      cy.createBlog({
+        title: "The title with the second most likes",
+        author: "The author with the second most likes",
+        url: "http://cypress.io",
+      });
+      cy.contains("The title with the most likes")
+        .parent()
+        .within(() => {
+          cy.contains("view").click();
+          cy.get("#like-button").click();
+          cy.wait(1000);
+          cy.get("#like-button").click();
+        });
+      cy.contains("The title with the second most likes")
+        .parent()
+        .within(() => {
+          cy.contains("view").click();
+          cy.get("#like-button").click();
+        });
+      cy.visit("/");
+    });
+
+    it("The blogs are ordered according to likes", function () {
+      cy.get(".blog").eq(0).should("contain", "The title with the most likes");
+      cy.get(".blog")
+        .eq(1)
+        .should("contain", "The title with the second most likes");
     });
   });
 });
