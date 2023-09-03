@@ -32,6 +32,7 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
       setUser(user);
+      blogService.setToken(user.token);
     }
   }, []);
 
@@ -126,6 +127,7 @@ const App = () => {
           type="text"
           value={username}
           name="Username"
+          id="username"
           onChange={({ target }) => setUsername(target.value)}
         ></input>
       </div>
@@ -135,10 +137,13 @@ const App = () => {
           type="password"
           value={password}
           name="Password"
+          id="password"
           onChange={({ target }) => setPassword(target.value)}
         ></input>
       </div>
-      <button type="submit">login</button>
+      <button type="submit" id="login-button">
+        login
+      </button>
     </form>
   );
 
