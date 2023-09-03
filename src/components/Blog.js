@@ -49,7 +49,11 @@ const Blog = ({ blog, modifyBlog, user, deleteBlog }) => {
         <br></br>
         <span className="blogUser">{blog.user.name}</span>
         <br></br>
-        <button style={showDeleteBtn} onClick={deleteHandler}>
+        <button
+          id="remove-button"
+          style={showDeleteBtn}
+          onClick={deleteHandler}
+        >
           remove
         </button>
       </div>

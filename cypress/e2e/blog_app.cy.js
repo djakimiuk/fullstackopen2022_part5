@@ -72,7 +72,7 @@ describe("Blog app", () => {
         });
     });
 
-    it.only("The user who created a blog can delete it", function () {
+    it("The user who created a blog can delete it", function () {
       cy.contains("Cypress test title")
         .parent()
         .within(() => {
@@ -80,6 +80,29 @@ describe("Blog app", () => {
           cy.contains("remove").click();
         });
       cy.contains("Cypress test title").should("not.exist");
+    });
+
+    it.only("Only the creator can see the delete button of a blog", function () {
+      cy.contains("Cypress test title")
+        .parent()
+        .within(() => {
+          cy.contains("view").click();
+          cy.get("#remove-button").should("be.visible");
+        });
+      cy.get("#logout-button").click();
+      const user = {
+        name: "Marek",
+        username: "marek123",
+        password: "marek123",
+      };
+      cy.request("POST", `${Cypress.env("BACKEND")}/users`, user);
+      cy.login({ username: "marek123", password: "marek123" });
+      cy.contains("Cypress test title")
+        .parent()
+        .within(() => {
+          cy.contains("view").click();
+          cy.get("#remove-button").should("not.be.visible");
+        });
     });
   });
 });
