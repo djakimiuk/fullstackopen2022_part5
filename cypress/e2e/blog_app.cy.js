@@ -59,17 +59,27 @@ describe("Blog app", () => {
         url: "http://cypress.io",
       });
     });
+
     it("The user can like a blog", function () {
       cy.contains("Cypress test title")
         .parent()
         .within(() => {
-          cy.get(".likes").invoke("text").as("initialLikes");
           cy.contains("view").click();
+          cy.get(".likes").invoke("text").as("initialLikes");
+          cy.wait(1000);
+          cy.contains("like").click();
+          cy.get(".likes").invoke("text").should("not.equal", "@initialLikes");
         });
-      cy.wait(1000);
-      cy.contains("like").click();
+    });
 
-      cy.get(".likes").invoke("text").should("not.equal", "@initialLikes");
+    it.only("The user who created a blog can delete it", function () {
+      cy.contains("Cypress test title")
+        .parent()
+        .within(() => {
+          cy.contains("view").click();
+          cy.contains("remove").click();
+        });
+      cy.contains("Cypress test title").should("not.exist");
     });
   });
 });
